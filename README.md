@@ -10,7 +10,7 @@ A bored Sunday becomes some silly data analysis.
 
 ## Results
 We can plot the popularity of a single song's popularity through the years:
-![](figures/song-popularity_344.pdf)
+![](figures/song-popularity_344.png)
 
 
 Or we can make a gif of the popularity of a selection of songs through time.

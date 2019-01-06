@@ -111,7 +111,7 @@ def plot_one_song(page, save=True):
     plt.legend()
 
     if save:
-        plt.savefig(dir_path + 'song-popularity_' + page + '.pdf')
+        plt.savefig(dir_path + 'song-popularity_' + page + '.png')
     plt.show()
 
 plot_one_song('344')
@@ -144,7 +144,7 @@ def plot_some_songs(pages, save=True):
     plt.legend()
 
     if save:
-        plt.savefig(dir_path + 'song-popularity_' + page + '.pdf')
+        plt.savefig(dir_path + 'song-popularity_' + page + '.png')
     plt.show()
 
 plot_some_songs('344')
