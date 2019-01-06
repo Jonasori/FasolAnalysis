@@ -22,3 +22,7 @@ We can plot the popularity of a single song's popularity through the years:
 
 Or we can make a gif of the popularity of a selection of songs through time.
 ![](figures/songs-evo_178-107-24t-344-245.gif)
+
+
+## To Do
+* If I can get the raw data, geographic stuff would be awesome to play with.
