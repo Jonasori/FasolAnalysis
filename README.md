@@ -23,7 +23,7 @@ We may also plot the way that several songs have changed over time:
 ![](figures/song-popularity_178-24t-344-245.png)
 
 Or we can make a gif of the popularity of a selection of songs through time.
-![](figures/songs-evo_178-107-24t-344-245.gif)
+![](figures/songs-evo_178-24t-344-245.gif)
 
 
 ## To Do
