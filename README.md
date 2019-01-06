@@ -1,4 +1,4 @@
-# Fasola Project
+# Fasola Analysis (or FasolAnalysis, if you will)
 
 A bored Sunday becomes some silly data analysis.
 
