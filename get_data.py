@@ -47,9 +47,9 @@ def get_data(url, filename='song_data_rank', outtype='pickle'):
     songs_df = pd.DataFrame(songs)
 
     if outtype == 'csv':
-        songs_df.to_csv('./{}.csv'.format(filename), sep=',', index=False)
+        songs_df.to_csv('./data/{}.csv'.format(filename), sep=',', index=False)
     elif outtype == 'pickle':
-        songs_df.to_pickle('./{}.pickle'.format(filename))
+        songs_df.to_pickle('./data/{}.pickle'.format(filename))
     else:
         return "Please choose 'csv' or 'pickle' for outtype."
 

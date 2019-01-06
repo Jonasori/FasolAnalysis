@@ -13,6 +13,8 @@ from ast import literal_eval
 
 #sns.palplot(sns.color_palette("GnBu_d"))
 cmap = sns.cubehelix_palette(light=1, as_cmap=True)
+
+base_data_path = '/Users/jonas/Desktop/Programming/Python/fasola/data/'
 dir_path = '/Users/jonas/Desktop/Programming/Python/fasola/figures/'
 
 # Get years:
@@ -23,9 +25,9 @@ years = range(2018, 1994, -1)
 def load_data_csv(metric='rank'):
     """I think this is garbage. Just use fucking pickles."""
     if metric == 'rank':
-        path = '/Users/jonas/Desktop/Programming/Python/fasola/song_data_rank.csv'
+        path = base_data_path + 'song_data_rank.csv'
     elif metric == 'count':
-        path = '/Users/jonas/Desktop/Programming/Python/fasola/song_data_count.csv'
+        path = base_data_path + 'song_data_count.csv'
     else:
         return "Please choose 'rank' or 'count' for metric."
 
@@ -39,9 +41,9 @@ def load_data_csv(metric='rank'):
 
 def load_data_pickle(metric='rank'):
     if metric == 'rank':
-        path = '/Users/jonas/Desktop/Programming/Python/fasola/song_data_rank.pickle'
+        path = base_data_path + 'song_data_rank.pickle'
     elif metric == 'count':
-        path = '/Users/jonas/Desktop/Programming/Python/fasola/song_data_count.pickle'
+        path = base_data_path + 'song_data_count.pickle'
     else:
         return "Please choose 'rank' or 'count' for metric."
 
