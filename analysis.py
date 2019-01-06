@@ -11,8 +11,6 @@ import matplotlib.pyplot as plt
 from ast import literal_eval
 
 sns.set_style('white')
-
-#sns.palplot(sns.color_palette("GnBu_d"))
 cmap = sns.cubehelix_palette(light=1, as_cmap=True)
 
 base_data_path = '/Users/jonas/Desktop/Programming/Python/fasola/data/'
@@ -88,40 +86,7 @@ def get_song_rank(page, year=2018):
     return rank
 
 
-
-
-# Do some plotting
-def plot_one_song(page, save=True):
-    """Plot the evolution and overall rank of a given song."""
-    plt.close()
-
-    page_idx = get_page_idx(page)
-    if type(page_idx) == str:
-        return page_idx
-
-    plt.plot(years, songs_df['ranks'][page_idx], '-b',
-             linestyle='-', color='b', linewidth='3',
-             label='Annual Rank')
-    plt.plot(years, songs_df['ranks'][page_idx], 'ob')
-
-    plt.plot(years, [songs_df['ranks'][page_idx][0]] * len(years),
-             linestyle='--', color='r',
-             label='Overall Rank')
-    # plt.gca().invert_yaxis()
-    plt.ylim(max(pages), -20)
-    plt.ylabel('Rank', weight='bold')
-    plt.xlabel('Year', weight='bold')
-    plt.yticks([1, 250, max_rank])
-    plt.title('Song Call Ranking for ' + page, weight='bold')
-    plt.legend()
-
-    if save:
-        plt.savefig(dir_path + 'song-popularity_' + page + '.png')
-    plt.show()
-
-plot_one_song('344')
-
-
+# Some plotters
 def plot_songs_popularity(ps, save=True):
     """
     Plot the evolution and overall rank of a set of songs.
@@ -186,7 +151,9 @@ def gif_evo(songs=ex_songs, show_plots=True, dt=0.4):
     for year in years[::-1]:
         ranks = [max_rank - get_song_rank(song, year) for song in ex_songs]
 
-        sns.barplot(x=ex_songs, y=ranks, palette=sns.color_palette("GnBu_d"))
+        sns.barplot(x=ex_songs, y=ranks,
+                    palette=sns.diverging_palette(220, 20, n=len(songs),
+                                                  center='dark'))
 
         plt.ylim(600, -20)
         plt.ylim(-20, 557)
