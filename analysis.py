@@ -10,6 +10,7 @@ import subprocess as sp
 import matplotlib.pyplot as plt
 from ast import literal_eval
 
+sns.set_style('white')
 
 #sns.palplot(sns.color_palette("GnBu_d"))
 cmap = sns.cubehelix_palette(light=1, as_cmap=True)
@@ -121,7 +122,7 @@ def plot_one_song(page, save=True):
 plot_one_song('344')
 
 
-def plot_some_songs(ps, save=True):
+def plot_songs_popularity(ps, save=True):
     """
     Plot the evolution and overall rank of a set of songs.
 
@@ -130,9 +131,14 @@ def plot_some_songs(ps, save=True):
     """
     plt.close()
 
-    colors = ['orange', 'red', 'purple', 'blue', 'green', 'yellow']
-    if len(ps) > len(colors):
-        return "Too many songs to plot"
+    # Give the user a little flexibility on input types.
+    if type(ps) == str or type(ps) == int:
+        ps = [str(ps)]
+
+    colors = sns.diverging_palette(220, 20, n=len(ps), center='dark')
+
+    if len(ps) > 7:
+        print "Plotting under protest: probably too many songs to look good."
 
     for p in range(len(ps)):
         page = ps[p]
@@ -141,15 +147,17 @@ def plot_some_songs(ps, save=True):
             return page_idx
 
         plt.plot(years, songs_df['ranks'][page_idx],
-                 linestyle='-', linewidth='3', alpha=0.6,
+                 linestyle='-', linewidth='3', alpha=0.7,
                  color=colors[p], label=page)
-
+        plt.plot(years, [songs_df['ranks'][page_idx][0]] * len(years),
+                 linestyle='--', color=colors[p], alpha=0.4)
 
     # plt.gca().invert_yaxis()
     plt.ylim(max(pages), -20)
     plt.ylabel('Rank', weight='bold')
     plt.xlabel('Year', weight='bold')
     plt.yticks([1, 250, max_rank])
+
     plt.title('Song Call Ranking for Songs ' + ', '.join(ps), weight='bold')
     plt.legend()
 
@@ -157,15 +165,22 @@ def plot_some_songs(ps, save=True):
         plt.savefig(dir_path + 'song-popularity_' + '-'.join(ps) + '.png')
     plt.show()
 
-plot_some_songs(ex_songs)
+plot_songs_popularity(ex_songs)
 
-# Kinda dumb, but make a gif of some songs evolutions.
+plot_songs_popularity(344)
+
+
+
+# Make a gif of some songs evolutions.
 ex_songs = ['178', '24t', '344', '245']
-def gif_evo(songs=ex_songs, show_plots=True):
+def gif_evo(songs=ex_songs, show_plots=True, dt=0.4):
     base_fname = 'songs-evo_' + '-'.join(songs)
     gif_outpath = dir_path + '/' + base_fname + '.gif'
 
     sp.call(['rm', '-f', '{}'.format(gif_outpath)])
+
+    # Set a color palette
+    sns.diverging_palette(220, 20, n=len(songs), center='dark')
 
     images = []
     for year in years[::-1]:
@@ -191,7 +206,7 @@ def gif_evo(songs=ex_songs, show_plots=True):
 
         images.append(imageio.imread(file_name))
 
-    imageio.mimsave(gif_outpath, images, duration=0.3)
+    imageio.mimsave(gif_outpath, images, duration=dt)
 
     for year in years:
         file_name = dir_path + base_fname + '_{}.png'.format(str(year))
