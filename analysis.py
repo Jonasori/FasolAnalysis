@@ -157,7 +157,7 @@ def plot_songs_popularity(ps, save=True):
     plt.ylabel('Rank', weight='bold')
     plt.xlabel('Year', weight='bold')
     plt.yticks([1, 250, max_rank])
-
+    sns.despine()
     plt.title('Song Call Ranking for Songs ' + ', '.join(ps), weight='bold')
     plt.legend()
 
@@ -196,6 +196,7 @@ def gif_evo(songs=ex_songs, show_plots=True, dt=0.4):
         plt.ylabel('Rank', weight='bold')
         plt.xlabel('Song', weight='bold')
         plt.title('Song Call Rankings in ' + str(year), weight='bold')
+        sns.despine()
 
         file_name = dir_path + base_fname + '_{}.png'.format(str(year))
         plt.savefig(file_name)
