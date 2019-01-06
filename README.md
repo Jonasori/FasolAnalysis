@@ -19,6 +19,8 @@ This repository is more of a gesture than any sort of real rigorous analysis. Ho
 We can plot the popularity of a single song's popularity through the years:
 ![](figures/song-popularity_344.png)
 
+We may also plot the way that several songs have changed over time:
+![](figures/song-popularity_178-24t-344-245.png)
 
 Or we can make a gif of the popularity of a selection of songs through time.
 ![](figures/songs-evo_178-107-24t-344-245.gif)
@@ -26,3 +28,6 @@ Or we can make a gif of the popularity of a selection of songs through time.
 
 ## To Do
 * If I can get the raw data, geographic stuff would be awesome to play with.
+* Any sort of actual analysis: which songs co-vary, which songs have had the most dramatic changes, etc.
+* Make the group of songs an object with plotting methods maybe?
+* Right now, everything is geared for ranking rather than sing-counts. Make sure things are robust to both.

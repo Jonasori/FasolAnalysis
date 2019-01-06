@@ -20,6 +20,9 @@ dir_path = '/Users/jonas/Desktop/Programming/Python/fasola/figures/'
 # Get years:
 years = range(2018, 1994, -1)
 
+# Find the least popular song (for scaling y-axes)
+max_rank = len(songs_df['page'])
+
 
 # Load in the data
 def load_data_csv(metric='rank'):
@@ -107,6 +110,7 @@ def plot_one_song(page, save=True):
     plt.ylim(max(pages), -20)
     plt.ylabel('Rank', weight='bold')
     plt.xlabel('Year', weight='bold')
+    plt.yticks([1, 250, max_rank])
     plt.title('Song Call Ranking for ' + page, weight='bold')
     plt.legend()
 
@@ -117,48 +121,52 @@ def plot_one_song(page, save=True):
 plot_one_song('344')
 
 
-def plot_some_songs(pages, save=True):
+def plot_some_songs(ps, save=True):
     """
     Plot the evolution and overall rank of a set of songs.
 
-    This is basically the same function as the one-song """
+    This is basically the same function as the one-song, just with some
+    switched-up labeling and so on.
+    """
     plt.close()
 
-    page_idx = get_page_idx(page)
-    if type(page_idx) == str:
-        return page_idx
+    colors = ['orange', 'red', 'purple', 'blue', 'green', 'yellow']
+    if len(ps) > len(colors):
+        return "Too many songs to plot"
 
-    plt.plot(years, songs_df['ranks'][page_idx], '-b',
-             linestyle='-', color='b', linewidth='3',
-             label='Annual Rank')
-    plt.plot(years, songs_df['ranks'][page_idx], 'ob')
+    for p in range(len(ps)):
+        page = ps[p]
+        page_idx = get_page_idx(page)
+        if type(page_idx) == str:
+            return page_idx
 
-    plt.plot(years, [songs_df['ranks'][page_idx][0]] * len(years),
-             linestyle='--', color='r',
-             label='Overall Rank')
+        plt.plot(years, songs_df['ranks'][page_idx],
+                 linestyle='-', linewidth='3', alpha=0.6,
+                 color=colors[p], label=page)
+
+
     # plt.gca().invert_yaxis()
     plt.ylim(max(pages), -20)
     plt.ylabel('Rank', weight='bold')
     plt.xlabel('Year', weight='bold')
-    plt.title('Song Call Ranking for ' + page, weight='bold')
+    plt.yticks([1, 250, max_rank])
+    plt.title('Song Call Ranking for Songs ' + ', '.join(ps), weight='bold')
     plt.legend()
 
     if save:
-        plt.savefig(dir_path + 'song-popularity_' + page + '.png')
+        plt.savefig(dir_path + 'song-popularity_' + '-'.join(ps) + '.png')
     plt.show()
 
-plot_some_songs('344')
+plot_some_songs(ex_songs)
 
 # Kinda dumb, but make a gif of some songs evolutions.
-ex_songs = ['178', '107', '24t', '344', '245']
+ex_songs = ['178', '24t', '344', '245']
 def gif_evo(songs=ex_songs, show_plots=True):
     base_fname = 'songs-evo_' + '-'.join(songs)
+    gif_outpath = dir_path + '/' + base_fname + '.gif'
 
-    sp.call(['rm', '-rf', '{}'.format(dir_path)])
-    sp.call(['mkdir', '{}'.format(dir_path)])
+    sp.call(['rm', '-f', '{}'.format(gif_outpath)])
 
-    # Find max (biggest number, least popular) call:
-    max_rank = len(songs_df['page'])
     images = []
     for year in years[::-1]:
         ranks = [max_rank - get_song_rank(song, year) for song in ex_songs]
@@ -167,7 +175,8 @@ def gif_evo(songs=ex_songs, show_plots=True):
 
         plt.ylim(600, -20)
         plt.ylim(-20, 557)
-        plt.yticks([-20, max_rank], [max_rank, 1])
+        # plt.yticks([-20, 250, 500], [500, 250, 1])
+        plt.yticks([1, 250, max_rank], [max_rank, 250, 1])
         # plt.yticks([0, max_rank], ['Least Popular', 'Most Popular'])
         plt.ylabel('Rank', weight='bold')
         plt.xlabel('Song', weight='bold')
@@ -182,8 +191,6 @@ def gif_evo(songs=ex_songs, show_plots=True):
 
         images.append(imageio.imread(file_name))
 
-    gif_outpath = dir_path + '/' + base_fname + '.gif'
-    print gif_outpath
     imageio.mimsave(gif_outpath, images, duration=0.3)
 
     for year in years:
