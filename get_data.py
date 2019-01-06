@@ -53,5 +53,5 @@ def get_data(url, filename='song_data_rank', outtype='pickle'):
     else:
         return "Please choose 'csv' or 'pickle' for outtype."
 
-get_data(url_rank, filename='song_data_rank')
-get_data(url_count, filename='song_data_count')
+get_data(url_rank, filename='song_data_rank', outtype='csv')
+get_data(url_count, filename='song_data_count', outtype='csv')
