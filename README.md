@@ -29,6 +29,10 @@ Or we can make a gif of the popularity of a selection of songs through time.
 If we really wanna get dorky, we can make a covariance matrix (or really, in this case, a correlation-coefficient matrix) on the songs and their rankings to see which songs move together:
 ![](figures/corrcoef_matrix.png)
 
+We can then leverage that covariance matrix to see (in theory) which songs move together or opposite:
+![]('figures/song-popularity_178-276.png')
+![]('figures/song-popularity_178-322.png')
+
 ## To Do
 * If I can get the raw data, geographic stuff would be awesome to play with.
 * Any sort of actual analysis: which songs co-vary, which songs have had the most dramatic changes, etc.
