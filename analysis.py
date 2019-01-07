@@ -72,7 +72,7 @@ max(pages)
 def get_page_idx(page):
     """Find the index of a song."""
     try:
-        idx = songs_df.where(songs_df['page'] == page)
+        idx = songs_df.where(songs_df['page'] == str(page))
         page_idx = idx.dropna()['page'].index[0]
         return page_idx
 
@@ -87,7 +87,7 @@ def get_song_rank(page, year=2018):
 
 
 # Some plotters
-def plot_songs_popularity(ps, save=True, show=True, custom_name=None, fig=None, ax=None):
+def plot_songs_popularity(ps, save=False, show=True, custom_name=None, fig=None, ax=None):
     """
     Plot the evolution and overall rank of a set of songs.
 
@@ -141,6 +141,7 @@ def plot_songs_popularity(ps, save=True, show=True, custom_name=None, fig=None, 
         else:
             outname = fig_path + custom_name + '.png'
         plt.savefig(outname)
+        print "Saved to " + outname
     if show:
         plt.show()
 
@@ -285,12 +286,16 @@ plot_songs_popularity(472)
 
 # We can query that covariance matrix now nicely.
 # Let's see which songs' fates are tied least and most closely to Africa.
-def find_sim_or_diff(song='178', cov_mat=covars, n=3):
-    """This doesn't work rn."""
-    song = '178'
-    n=3
-    cov_mat = covars
+def find_sim_or_diff(song, cov_mat=covars, n=3):
+    """
+    Plot the n most- and least-similar songs (in popularity) to a given song.
 
+    Args:
+        song (str or int): the page number of the song to be compared.
+        cov_mat (np.array): the covariance matrix to draw on for similarity calcs.
+        n (int): how many other songs to compare to on top and bottom.
+
+    """
     s = get_page_idx(song)
     other_songs = range(557)
     other_songs.pop(s)
@@ -303,9 +308,6 @@ def find_sim_or_diff(song='178', cov_mat=covars, n=3):
     # Get covariance and ranking number
     covs_df = pd.DataFrame({'page': range(len(covs)), 'cov_val': covs})
 
-
-    covs_df.sort_values(by='cov_val')[-3:]
-
     # Do it manually with a where:
     np.where(covs == max(covs))[0][0]
     most = np.where(covs == max(covs))[0][0]
@@ -316,30 +318,24 @@ def find_sim_or_diff(song='178', cov_mat=covars, n=3):
     close = covs_df.sort_values(by='cov_val')[-n:]['page'].tolist()
 
     closest = [songs_df['page'][s]] +  songs_df['page'][close[:3]].tolist()
-    closest
     farthest = [songs_df['page'][s]] +  songs_df['page'][far[:3]].tolist()
-    farthest
 
-    plot_songs_popularity(closest, custom_name='africas_most_similar') #, fig=fig, ax=ax1)
-    plot_songs_popularity(farthest, custom_name='africas_least_similar') #, fig=fig, ax=ax2)
+    plot_songs_popularity(closest, show=True, save=True, custom_name='p' + str(song) + '_most_similar') #, fig=fig, ax=ax1)
+    plot_songs_popularity(farthest, show=True, save=True,custom_name='p' + str(song) + '_least_similar') #, fig=fig, ax=ax2)
     # fig.show()
 
+find_sim_or_diff(song='300', cov_mat=covars, n=3)
 
 
-
-s1 = 0
-covs_100 = [covars[s1][s2] for s2 in range(1, 557)]
-np.where(covs_100 == max(covs_100))[0][0]
+plot_songs_popularity(['178', '547'])
 
 
-plot_songs_popularity(['178', '440'])
+# Who has the most variance?
+means = [np.mean(covars[i]) for i in range(len(covars[i]))]
 
+np.where(means == min(means))
 
-
-
-
-
-
+songs_df['page'][61]
 
 
 

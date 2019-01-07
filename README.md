@@ -34,6 +34,7 @@ We can then leverage that covariance matrix to see (in theory) which songs move 
 ![](figures/africas_most_similar.png) ![](figures/africas_least_similar.png)
 
 Africa isn't that interesting, though, because it's always bene a popular one, so it just draws other popular ones (unsurprisingly, 276 Bridgewater is its closest partner). So let's look at one that has experienced a lot of variation in time like, say, 472 Akin:
+
 ![](figures/akin_most_similar.png) ![](figures/akin_least_similar.png)
 
 In this case, we can see that 440 North Salem and 492 Invocation both grew with Akin, although neither reached quite the heights that Akin has in the last couple years. Africa is still in the mix, I think just because it isn't moving much at all and covariance calculations tend to like that.
