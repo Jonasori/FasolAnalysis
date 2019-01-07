@@ -29,9 +29,21 @@ Or we can make a gif of the popularity of a selection of songs through time.
 If we really wanna get dorky, we can make a covariance matrix (or really, in this case, a correlation-coefficient matrix) on the songs and their rankings to see which songs move together:
 ![](figures/corrcoef_matrix.png)
 
-We can then leverage that covariance matrix to see (in theory) which songs move together or opposite:
-![]('figures/song-popularity_178-276.png')
-![]('figures/song-popularity_178-322.png')
+We can then leverage that covariance matrix to see (in theory) which songs move together or opposite, we can simply choose a song and query its column in the covariance matrix. We may then plot, say, the three most- and least-similar songs. For 178 Africa, those look like this:
+
+![](figures/africas_most_similar.png) ![](figures/africas_least_similar.png)
+
+Africa isn't that interesting, though, because it's always bene a popular one, so it just draws other popular ones (unsurprisingly, 276 Bridgewater is its closest partner). So let's look at one that has experienced a lot of variation in time like, say, 472 Akin:
+![](figures/akin_most_similar.png) ![](figures/akin_least_similar.png)
+
+In this case, we can see that 440 North Salem and 492 Invocation both grew with Akin, although neither reached quite the heights that Akin has in the last couple years. Africa is still in the mix, I think just because it isn't moving much at all and covariance calculations tend to like that.
+
+On the flip side, we see that 234 Reverential Anthem, 250 Heavenly Vision, and 313t Concord have all been either declining or maintaining a chaotic flat trajectory, in stark contrast to Akin's fast and smooth climb to the top. (A side note: I don't know my history too well but that drop that Heavenly vision takes right around 2010 seems to be right around when Sacred Harp was really hitting its stride in this whole "rebirth" thing. Are Millenials killing anthems now, too?)
+
+
+What else do you want to know? What else can you see in what I've shown here? I would love to geek out with people over this stuff, so if you see something I missed, please let me know.
+
+
 
 ## To Do
 * If I can get the raw data, geographic stuff would be awesome to play with.

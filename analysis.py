@@ -87,7 +87,7 @@ def get_song_rank(page, year=2018):
 
 
 # Some plotters
-def plot_songs_popularity(ps, save=True, show=True, fig=None, ax=None):
+def plot_songs_popularity(ps, save=True, show=True, custom_name=None, fig=None, ax=None):
     """
     Plot the evolution and overall rank of a set of songs.
 
@@ -136,7 +136,11 @@ def plot_songs_popularity(ps, save=True, show=True, fig=None, ax=None):
     ax.legend()
 
     if save:
-        plt.savefig(fig_path + 'song-popularity_' + '-'.join(ps) + '.png')
+        if custom_name == None:
+            outname = fig_path + 'song-popularity_' + '-'.join(ps) + '.png'
+        else:
+            outname = fig_path + custom_name + '.png'
+        plt.savefig(outname)
     if show:
         plt.show()
 
@@ -276,26 +280,48 @@ covars = get_covariances(method='corrcoef', save=True, out_as='pdf')
 
 
 
+songs_df['page'][4]
+plot_songs_popularity(472)
 
 # We can query that covariance matrix now nicely.
 # Let's see which songs' fates are tied least and most closely to Africa.
-
-def find_sim_or_diff(cov_mat=covars, song='178'):
+def find_sim_or_diff(song='178', cov_mat=covars, n=3):
     """This doesn't work rn."""
     song = '178'
+    n=3
+    cov_mat = covars
+
     s = get_page_idx(song)
     other_songs = range(557)
     other_songs.pop(s)
-    covs = [covars[s][s2] for s2 in other_songs]
+    covs = [cov_mat[s][s2] for s2 in other_songs]
+
+    # Get covariance and actual page number
+    pages_idx = songs_df['page'][range(len(covs))]
+    covs_df = pd.DataFrame({'page': songs_df['page'][pages_idx], 'cov_val': covs})
+
+    # Get covariance and ranking number
+    covs_df = pd.DataFrame({'page': range(len(covs)), 'cov_val': covs})
+
+
+    covs_df.sort_values(by='cov_val')[-3:]
+
+    # Do it manually with a where:
     np.where(covs == max(covs))[0][0]
     most = np.where(covs == max(covs))[0][0]
     least = np.where(covs == min(covs))[0][0]
-    closest = [songs_df['page'][s], songs_df['page'][most]]
-    farthest = [songs_df['page'][s], songs_df['page'][least]]
 
-    fig, (ax1, ax2) = plt.subplots(1, 2)
-    plot_songs_popularity(closest) #, fig=fig, ax=ax1)
-    plot_songs_popularity(farthest) #, fig=fig, ax=ax2)
+    # Or sort the list and skim the top and bottom.
+    far = covs_df.sort_values(by='cov_val')[:n]['page'].tolist()
+    close = covs_df.sort_values(by='cov_val')[-n:]['page'].tolist()
+
+    closest = [songs_df['page'][s]] +  songs_df['page'][close[:3]].tolist()
+    closest
+    farthest = [songs_df['page'][s]] +  songs_df['page'][far[:3]].tolist()
+    farthest
+
+    plot_songs_popularity(closest, custom_name='africas_most_similar') #, fig=fig, ax=ax1)
+    plot_songs_popularity(farthest, custom_name='africas_least_similar') #, fig=fig, ax=ax2)
     # fig.show()
 
 
@@ -306,7 +332,7 @@ covs_100 = [covars[s1][s2] for s2 in range(1, 557)]
 np.where(covs_100 == max(covs_100))[0][0]
 
 
-plot_songs_popularity([songs_df['page'][0], songs_df['page'][4]])
+plot_songs_popularity(['178', '440'])
 
 
 
