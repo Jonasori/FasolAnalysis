@@ -26,8 +26,15 @@ Or we can make a gif of the popularity of a selection of songs through time.
 ![](figures/songs-evo_178-24t-344-245.gif)
 
 
+If we really wanna get dorky, we can make a covariance matrix (or really, in this case, a correlation-coefficient matrix) on the songs and their rankings to see which songs move together:
+![](figures/corrcoef_matrix.png)
+
 ## To Do
 * If I can get the raw data, geographic stuff would be awesome to play with.
 * Any sort of actual analysis: which songs co-vary, which songs have had the most dramatic changes, etc.
 * Make the group of songs an object with plotting methods maybe?
 * Right now, everything is geared for ranking rather than sing-counts. Make sure things are robust to both.
+
+
+## Thanks
+Thanks to the wonderful people who compile these data and make them freely available for fools like me to poke at.

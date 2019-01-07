@@ -14,7 +14,7 @@ sns.set_style('white')
 cmap = sns.cubehelix_palette(light=1, as_cmap=True)
 
 base_data_path = '/Users/jonas/Desktop/Programming/Python/fasola/data/'
-dir_path = '/Users/jonas/Desktop/Programming/Python/fasola/figures/'
+fig_path = '/Users/jonas/Desktop/Programming/Python/fasola/figures/'
 
 # Get years:
 years = range(2018, 1994, -1)
@@ -127,7 +127,7 @@ def plot_songs_popularity(ps, save=True):
     plt.legend()
 
     if save:
-        plt.savefig(dir_path + 'song-popularity_' + '-'.join(ps) + '.png')
+        plt.savefig(fig_path + 'song-popularity_' + '-'.join(ps) + '.png')
     plt.show()
 
 plot_songs_popularity(ex_songs)
@@ -140,7 +140,7 @@ plot_songs_popularity(344)
 ex_songs = ['178', '24t', '344', '245']
 def gif_evo(songs=ex_songs, show_plots=True, dt=0.4):
     base_fname = 'songs-evo_' + '-'.join(songs)
-    gif_outpath = dir_path + '/' + base_fname + '.gif'
+    gif_outpath = fig_path + '/' + base_fname + '.gif'
 
     sp.call(['rm', '-f', '{}'.format(gif_outpath)])
 
@@ -165,7 +165,7 @@ def gif_evo(songs=ex_songs, show_plots=True, dt=0.4):
         plt.title('Song Call Rankings in ' + str(year), weight='bold')
         sns.despine()
 
-        file_name = dir_path + base_fname + '_{}.png'.format(str(year))
+        file_name = fig_path + base_fname + '_{}.png'.format(str(year))
         plt.savefig(file_name)
 
         if show_plots:
@@ -177,7 +177,7 @@ def gif_evo(songs=ex_songs, show_plots=True, dt=0.4):
     imageio.mimsave(gif_outpath, images, duration=dt)
 
     for year in years:
-        file_name = dir_path + base_fname + '_{}.png'.format(str(year))
+        file_name = fig_path + base_fname + '_{}.png'.format(str(year))
         sp.call(['rm', '-rf', '{}'.format(file_name)])
 
 gif_evo(show_plots=True)
@@ -185,12 +185,96 @@ gif_evo(show_plots=True)
 
 
 
-
+songs_df['page']
 # Analysis stuff
 """
 Some analysis ideas:
     - Find which songs have the most change
 """
+
+def get_var(df=songs_df):
+
+    n_years = len(years)
+    n_songs = len(songs_df['page'])
+    variances = np.zeros((n_songs, n_songs))
+    annual_diffs = np.zeros((n_songs, n_songs, n_years))
+
+    # Figure out how to just get upper/lower triangle rather than populating w dups
+    for s1 in range(n_songs):
+        for s2 in range(n_songs):
+            s1_ranks = songs_df['ranks'][s1]
+            s2_ranks = songs_df['ranks'][s2]
+
+            # Set up an offset/normalizer so that we're just looking at
+            # functional form, not call totals. Maybe do this as a frac instead.
+            offset = s1_ranks[0] - s2_ranks[0]
+
+            annual_difference = [s1_ranks[year] - s2_ranks[year] - offset for year in range(n_years)]
+            variance = sum( (annual_difference - np.mean(annual_difference))**2)/float(n_years)
+
+            variances[s1][s2] = variance
+            annual_diffs[s1][s2] = annual_difference
+
+
+    mask = np.zeros_like(variances)
+    mask[np.triu_indices_from(mask)] = True
+    corr_matrix=variances.corr()
+
+    sns.heatmap(variances, mask=mask) #, vmin=510, vmax=530)
+    plt.show()
+    return variances
+vars = get_var()
+
+
+def get_covariances(songs=songs_df, method='corrcoef', save=False):
+    """
+    Make a covariance matrix.
+
+    Note that covariance with itself is just variance.
+    """
+    # Make a matrix out of the rankings.
+    songs_mat = np.matrix(songs['ranks'].tolist())
+
+    if method == 'corrcoef':
+        covariance_matrix = np.corrcoef(songs_mat)
+    elif method == 'cov':
+        covariance_matrix = np.cov(songs_mat)
+    else:
+        return "Please choose 'cov' or 'corrcoeff' for method."
+
+    mask = np.zeros_like(covariance_matrix)
+    mask[np.triu_indices_from(mask)] = True
+    sns.heatmap(covariance_matrix, mask=mask, cmap='Blues')
+
+    prefix = 'Normalized' if method == 'corrcoef' else ''
+    plt.title(prefix + ' Covariance Matrix for Song Rankings Through Time',
+              weight='bold')
+    if save:
+        plt.savefig(fig_path + method + '_matrix.png', dpi=300)
+
+    plt.show()
+    return covariance_matrix
+
+covars = get_covariances(method='corrcoef', save=True)
+
+
+np.nanmin(covars)
+np.where(covars == np.nanmax(covars) and covars < 1.)
+
+
+covars.shape
+
+
+s1, s2 = 244, 3
+cv_m[s1][s2]
+
+plot_songs_popularity([songs_df['page'][s1], songs_df['page'][s2]])
+
+
+
+
+
+
 
 
 
